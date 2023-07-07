@@ -1,0 +1,33 @@
+version: '3'
+services:
+  pytest:
+    container_name: pytest
+    build: ./
+    image: testing/pytest
+    environment:
+      - JWT_SECRET_KEY
+      - JWT_ALGORITHMS
+    depends_on:
+      - test-ugc
+      - test-mongo
+
+  test-ugc:
+    extends:
+      file: ../../docker-compose.yml
+      service: ugc
+    container_name: test-ugc
+    image: testing/ugc
+    environment:
+      - MONGO_HOST=test-mongo
+
+  test-mongo:
+    extends:
+      file: ../../common-services.yml
+      service: mongo
+    container_name: test-mongo
+    environment:
+      - MONGO_DB
+      - MONGO_USERNAME
+      - MONGO_PASSWORD
+    volumes:
+      - ../../mongo/init_database.js:/docker-entrypoint-initdb.d/init_database.js

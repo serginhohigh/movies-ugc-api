@@ -1,0 +1,141 @@
+version: '3.0'
+
+services:
+  nginx:
+    container_name: nginx
+    restart: on-failure
+    image: nginx:1.23.3
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+    ports:
+      - '8000:80'
+
+  ugc:
+    container_name: ugc
+    restart: on-failure
+    build:
+      context: ./ugc
+      args:
+        - APPHOMEDIR
+        - USERNAME
+        - USER_UID
+        - USER_GID
+    env_file:
+      - ./ugc/.env
+
+  mongors1n1:
+    extends:
+      file: ./common-services.yml
+      service: mongo
+    container_name: mongors1n1
+    command: mongod --shardsvr --replSet mongors1 --dbpath /data/db --port 27017
+    volumes:
+      - mongors1n1:/data/db
+
+  mongors1n2:
+    extends:
+      file: ./common-services.yml
+      service: mongo
+    container_name: mongors1n2
+    command: mongod --shardsvr --replSet mongors1 --dbpath /data/db --port 27017
+    volumes:
+      - mongors1n2:/data/db
+
+  mongors1n3:
+    extends:
+      file: ./common-services.yml
+      service: mongo
+    container_name: mongors1n3
+    command: mongod --shardsvr --replSet mongors1 --dbpath /data/db --port 27017
+    volumes:
+      - mongors1n3:/data/db
+
+  mongors2n1:
+    extends:
+      file: ./common-services.yml
+      service: mongo
+    container_name: mongors2n1
+    command: mongod --shardsvr --replSet mongors2 --dbpath /data/db --port 27017
+    volumes:
+      - mongors2n1:/data/db
+
+  mongors2n2:
+    extends:
+      file: ./common-services.yml
+      service: mongo
+    container_name: mongors2n2
+    command: mongod --shardsvr --replSet mongors2 --dbpath /data/db --port 27017
+    volumes:
+      - mongors2n2:/data/db
+
+  mongors2n3:
+    extends:
+      file: ./common-services.yml
+      service: mongo
+    container_name: mongors2n3
+    command: mongod --shardsvr --replSet mongors2 --dbpath /data/db --port 27017
+    volumes:
+      - mongors2n3:/data/db
+
+  mongocfg1:
+    extends:
+      file: ./common-services.yml
+      service: mongo
+    container_name: mongocfg1
+    command: mongod --configsvr --replSet mongors1conf --dbpath /data/db --port 27017
+    volumes:
+      - mongocfg1:/data/db
+
+  mongocfg2:
+    extends:
+      file: ./common-services.yml
+      service: mongo
+    container_name: mongocfg2
+    command: mongod --configsvr --replSet mongors1conf --dbpath /data/db --port 27017
+    volumes:
+      - mongocfg2:/data/db
+
+  mongocfg3:
+    extends:
+      file: ./common-services.yml
+      service: mongo
+    container_name: mongocfg3
+    command: mongod --configsvr --replSet mongors1conf --dbpath /data/db --port 27017
+    volumes:
+      - mongocfg3:/data/db
+
+  mongos1:
+    extends:
+      file: ./common-services.yml
+      service: mongo
+    container_name: mongos1
+    environment:
+      - MONGO_DB
+      - MONGO_USERNAME
+      - MONGO_PASSWORD
+    depends_on:
+      - mongocfg1
+      - mongocfg2
+    command: mongos --configdb mongors1conf/mongocfg1:27017,mongocfg2:27017,mongocfg3:27017 --port 27017 --bind_ip_all
+
+  mongos2:
+    extends:
+      file: ./common-services.yml
+      service: mongo
+    container_name: mongos2
+    depends_on:
+      - mongocfg1
+      - mongocfg2
+    command: mongos --configdb mongors1conf/mongocfg1:27017,mongocfg2:27017,mongocfg3:27017 --port 27017 --bind_ip_all
+
+volumes:
+  mongors1n1:
+  mongors1n2:
+  mongors1n3:
+  mongors2n1:
+  mongors2n2:
+  mongors2n3:
+  mongocfg1:
+  mongocfg2:
+  mongocfg3:

@@ -1,0 +1,11 @@
+version: '3.9'
+services:
+  ugc:
+    tty: true
+    volumes:
+      - ./ugc/src:/opt/app
+    entrypoint: bash
+
+  mongos1:
+    ports:
+      - '27017:27017'

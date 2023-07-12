@@ -2,49 +2,30 @@
 
 Сервис пользовательского контента для онлайн кинотеатра. Позволяет осуществлять следующие действия:
 
-- Добавить кинопроизведение в закладки
-- Удалить кинопроизведение из закладок
-- Получить полный список закладок с пагинацией
+- Со стороны пользователя:
 
-- Оставить или удалить рецензию
-- Поставить лайки рецензии
-- Получить полный список рецензий с количеством лайков и дизлайков по определенному фильму
+  - Добавить кинопроизведение в закладки
+  - Удалить кинопроизведение из закладок
+  - Получить полный список закладок
+  - Оставить или удалить рецензию
+  - Поставить рецензии лайк
+  - Поставить или удалить оценку кинопроизведению
+    > Для оценки фильмов используется 10-бальная шкала (от 1 до 10)
 
-- Поставить или удалить оценку кинопроизведению
-  > Для оценки фильмов используется 10-бальная шкала (от 1 до 10)
-- Получить рейтинг кинопроизведения
+- Отдельно со стороны фронта при загрузке страницы фильма:
 
----
-
-Контракты API по пути `/api/v1/swagger#/`. Сгенерировать JWT можно с помощью следующего сниппета:
-
-> Не забудьте предварительно установить python-jose
-
-```
-import uuid
-
-from datetime import UTC, datetime, timedelta
-from jose import jwt
-
-
-token_data = {
-    "sub": str(uuid.uuid4()),
-    "role": "Admin",
-    "exp": datetime.now(tz=UTC) + timedelta(hours=1),
-    "iat": datetime.now(tz=UTC),
-    "type": "access",
-}
-
-print(jwt.encode(token_data, "123qwe", algorithm="HS256"))
-```
+  - Получить полный список рецензий с количеством лайков и дизлайков по определенному фильму
+  - Получить рейтинг кинопроизведения
 
 ## Что используется в проекте
 
-- FastAPI + [Dependency Injector](https://python-dependency-injector.ets-labs.org/)
-- Кластер MongoDB
-- Sentry
-- python-jose для проверки JWT токенов
-- pytest + pytest-asyncio + aiohttp для функционального тестирования
+- [FastAPI](https://fastapi.tiangolo.com/) + [Dependency Injector](https://python-dependency-injector.ets-labs.org/)
+- Кластер [MongoDB](https://www.mongodb.com/)
+- [Sentry](https://sentry.io/welcome/)
+- [python-jose](https://github.com/mpdavis/python-jose) для проверки JWT токенов
+- [pytest](https://docs.pytest.org/en/latest) +
+  [pytest-asyncio](https://github.com/pytest-dev/pytest-asyncio) +
+  [aiohttp](https://docs.aiohttp.org/en/stable/) для функционального тестирования
 
 ## Как запуститься
 
@@ -65,6 +46,31 @@ docker exec -i mongos1 mongosh < mongo/init_database.js
 docker exec -i mongos1 mongosh < mongo/enable_sharding.js
 ```
 
+---
+
+Контракты API по пути `/api/v1/swagger#/`.
+
+Сгенерировать JWT можно с помощью следующего сниппета:
+
+> Не забудьте предварительно установить python-jose
+
+```
+import uuid
+
+from datetime import UTC, datetime, timedelta
+from jose import jwt
+
+token_data = {
+    "sub": str(uuid.uuid4()),
+    "role": "Admin",
+    "exp": datetime.now(tz=UTC) + timedelta(hours=1),
+    "iat": datetime.now(tz=UTC),
+    "type": "access",
+}
+
+print(jwt.encode(token_data, "123qwe", algorithm="HS256"))
+```
+
 ## Как запустить тестирование
 
 - Выполнить команду `make test`
@@ -77,3 +83,4 @@ docker exec -i mongos1 mongosh < mongo/enable_sharding.js
 - [ ] Poetry или PDM
 - [ ] SQLAlchemy mongodb
 - [ ] Репликация данных в ClickHouse для аналитиков
+- [ ] Перевести README.md на английский язык

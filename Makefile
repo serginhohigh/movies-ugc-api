@@ -1,5 +1,3 @@
-.PHONY : help clean lint
-
 COMPOSE = docker compose
 COMPOSE_FILE = docker-compose.yml
 COMPOSE_FILE_DEV = docker-compose.dev.yml

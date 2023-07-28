@@ -26,6 +26,14 @@
 - [pytest](https://docs.pytest.org/en/latest) +
   [pytest-asyncio](https://github.com/pytest-dev/pytest-asyncio) +
   [aiohttp](https://docs.aiohttp.org/en/stable/) для функционального тестирования
+- [poetry](https://github.com/python-poetry/poetry) для управления python зависимостями
+
+## Зависимости
+
+- GNU make
+- docker
+- docker compose V2
+- poetry (Optional)
 
 ## Как запуститься
 
@@ -80,7 +88,7 @@ print(jwt.encode(token_data, "123qwe", algorithm="HS256"))
 
 ## TODO
 
-- [ ] Poetry или PDM
+- [x] Poetry или PDM
 - [ ] SQLAlchemy mongodb
 - [ ] Репликация данных в ClickHouse для аналитиков
 - [ ] Перевести README.md на английский язык

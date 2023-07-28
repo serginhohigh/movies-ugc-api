@@ -1,3 +1,38 @@
+[tool.poetry]
+name = "ugc"
+version = "0.1.0"
+description = "Movies ugc service"
+authors = ["serginhohigh"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.100.1"
+pydantic = "1.10.5"
+orjson = "^3.9.2"
+motor = "^3.2.0"
+dependency-injector = "^4.41.0"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+sentry-sdk = "^1.28.1"
+uvloop = "^0.17.0"
+gunicorn = "^21.2.0"
+uvicorn = {extras = ["standard"], version = "^0.23.1"}
+
+[tool.poetry.group.lint.dependencies]
+pre-commit = "^3.3.3"
+ruff = "^0.0.280"
+black = "^23.7.0"
+mypy = "^1.4.1"
+isort = "^5.12.0"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^7.4.0"
+pytest-asyncio = "^0.21.1"
+aiohttp = "^3.8.5"
+pydantic = "1.10.5"
+motor = "^3.2.0"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+
 [tool.ruff]
 select = ['ANN', 'ARG', 'B', 'BLE', 'C40', 'COM', 'DJ', 'DTZ', 'E', 'EM', 'ERA001', 'EXE', 'F', 'FBT', 'G', 'I', 'ICN', 'INP', 'ISC', 'N', 'PIE', 'PL', 'PT', 'PYI', 'Q', 'RET', 'RSE', 'S', 'SIM', 'SLF', 'T20', 'TRY', 'W', 'YTT', 'UP']
 ignore = ['ANN101', 'ANN102', 'COM812']
@@ -46,3 +81,7 @@ profile = 'black'
 src_paths = ['ugc/src', 'tests/functional']
 multi_line_output = 3
 line_length = 88
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

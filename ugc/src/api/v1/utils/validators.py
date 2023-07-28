@@ -48,8 +48,8 @@ async def valid_access_token(
         )
         payload = AccessToken(**payload)  # type: ignore
     except JWTError:
-        raise credentials_exception
+        raise credentials_exception from None
     except ValidationError:
-        raise credentials_exception
+        raise credentials_exception from None
 
     return payload  # type: ignore
